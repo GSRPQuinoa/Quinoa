@@ -116,7 +116,7 @@
           <form id="punishmentForm"
                 data-log-to-discord="true"
                 data-form-name="Punishment Log"
-                data-webhook="YOUR_PUNISHMENT_WEBHOOK_HERE"
+                data-webhook="https://discord.com/api/webhooks/1358376231568932976/xBqrMbonCQBB3GqANmSbYOvggbZZlU9I9k36spGF3neeg3aFMJx-k9LXEzt2QE_bri8J"
                 data-status-target="punishmentStatus">
             <div class="field-group">
               <label>Issuer's Discord ID</label>
@@ -127,15 +127,12 @@
               <input name="Offenders Discord ID" placeholder="Offender's Discord ID (numbers only)" required />
             </div>
             <div class="field-group">
-              <label>Punishment</label>
-              <select name="Punishment" required>
+              <label>Punishment Log</label>
+              <select name="Punishment Log" required>
                 <option value="">Select punishment type</option>
-                <option>Verbal Warning</option>
-                <option>Written Warning</option>
                 <option>Strike</option>
-                <option>Suspension</option>
-                <option>Termination</option>
-                <option>Other</option>
+                <option>Removal (Without Ban)</option>
+                <option>Removal (With Ban)</option>
               </select>
             </div>
             <div class="field-group">
