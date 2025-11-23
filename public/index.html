@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GSRP Staff Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="loginOverlay" class="login-overlay">
+  <div class="login-card">
+    <h1>Staff Login</h1>
+    <p class="muted">Use Discord to access the GSRP Staff Portal.</p>
+
+    <button id="discordLoginButton">Login with Discord</button>
+    <div id="loginError" class="error hidden"></div>
+    <p class="login-footer muted">
+      You must be in the GSRP Discord server and have an allowed role.
+    </p>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="portal-title">GSRP Portal</div>
+    </div>
+    <nav class="nav">
+      <p class="nav-label">Navigation</p>
+      <button class="nav-item active" data-page="home">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" data-page="leo">
+        <span class="nav-icon">👮</span>
+        <span>LEO/Staff</span>
+      </button>
+      <button class="nav-item" data-page="points">
+        <span class="nav-icon">📊</span>
+        <span>Point Logging System</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p class="muted small">Logged in as</p>
+      <p class="user-name" id="sidebarUserName">Not logged in</p>
+      <p class="muted tiny" id="sidebarUserRank"></p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div></div>
+      <div class="topbar-user">
+        <span id="topbarUserName">Staff</span>
+        <span class="topbar-user-rank" id="topbarUserRank"></span>
+      </div>
+    </header>
+
+    <!-- HOME PAGE -->
+    <section class="page" id="page-home">
+      <div class="page-inner">
+        <header class="page-header center">
+          <h1>Quick Actions</h1>
+          <p class="muted">Access your most used tools quickly</p>
+        </header>
+
+        <div class="section-block center">
+          <h2>LEO/Staff</h2>
+          <div class="actions-row center">
+            <button class="action-btn primary" data-page-jump="leo">
+              🧾 Punishment Log
+            </button>
+          </div>
+        </div>
+
+        <div class="section-block center">
+          <h2>Law Enforcement Point Logging</h2>
+          <div class="actions-row">
+            <button class="action-btn" data-page-jump="points" data-tab-jump="patrol">
+              🚓 Patrol Log
+            </button>
+            <button class="action-btn" data-page-jump="points" data-tab-jump="onboarding">
+              👤 Onboarding Log
+            </button>
+            <button class="action-btn" data-page-jump="points" data-tab-jump="training">
+              🎓 Training Log
+            </button>
+            <button class="action-btn" data-page-jump="points" data-tab-jump="ridealong">
+              👥 Ride Along Log
+            </button>
+          </div>
+        </div>
+
+        <footer class="home-footer">
+          <p>Georgia State Roleplay. Cuz We Can.</p>
+          <p class="muted tiny">EST: 2018</p>
+        </footer>
+      </div>
+    </section>
+
+    <!-- LEO / STAFF PAGE -->
+    <section class="page hidden" id="page-leo">
+      <div class="page-inner">
+        <header class="page-header center">
+          <h1>LEO/Staff</h1>
+          <p class="muted">Law Enforcement and Staff Resources</p>
+        </header>
+
+        <div class="card">
+          <header class="card-header">
+            <h2>Punishment Log</h2>
+            <p class="muted">Record disciplinary actions and punishments</p>
+          </header>
+
+          <form id="punishmentForm"
+                data-log-to-discord="true"
+                data-form-name="Punishment Log"
+                data-webhook="YOUR_PUNISHMENT_WEBHOOK_HERE"
+                data-status-target="punishmentStatus">
+            <div class="field-group">
+              <label>Issuer's Discord ID</label>
+              <input name="Issuers Discord ID" placeholder="Your Discord ID (numbers only)" required />
+            </div>
+            <div class="field-group">
+              <label>Offender's Discord ID</label>
+              <input name="Offenders Discord ID" placeholder="Offender's Discord ID (numbers only)" required />
+            </div>
+            <div class="field-group">
+              <label>Punishment</label>
+              <select name="Punishment" required>
+                <option value="">Select punishment type</option>
+                <option>Verbal Warning</option>
+                <option>Written Warning</option>
+                <option>Strike</option>
+                <option>Suspension</option>
+                <option>Termination</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Reason for Punishment</label>
+              <textarea name="Reason for Punishment" placeholder="Provide detailed reason..." required></textarea>
+              <p class="help-text">Provide detailed information</p>
+            </div>
+            <div class="field-group">
+              <label>Evidence</label>
+              <textarea name="Evidence" placeholder="Enter evidence links or description (N/A if none)" required></textarea>
+              <p class="help-text">Put N/A if no evidence</p>
+            </div>
+
+            <button type="submit" class="submit-btn full">Submit Punishment Log</button>
+            <div id="punishmentStatus" class="status-text muted"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- POINT LOGGING PAGE -->
+    <section class="page hidden" id="page-points">
+      <div class="page-inner">
+        <header class="page-header center">
+          <h1>Law Enforcement Point Logging</h1>
+          <p class="muted">Track and manage patrol activities</p>
+        </header>
+
+        <div class="tabs">
+          <button class="tab-button active" data-tab="patrol">Patrol</button>
+          <button class="tab-button" data-tab="onboarding">Onboarding</button>
+          <button class="tab-button" data-tab="training">Training</button>
+          <button class="tab-button" data-tab="ridealong">Ride Along</button>
+        </div>
+
+        <!-- PATROL -->
+        <div class="card tab-panel" id="tab-patrol">
+          <header class="card-header">
+            <h2>Patrol Log</h2>
+            <p class="muted">Record your patrol activities and incidents</p>
+          </header>
+
+          <form id="patrolForm"
+                data-log-to-discord="true"
+                data-form-name="Patrol Log"
+                data-webhook="YOUR_PATROL_WEBHOOK_HERE"
+                data-status-target="patrolStatus">
+            <div class="field-group">
+              <label>Discord ID</label>
+              <input name="Discord ID" placeholder="Your Discord ID (numbers only)" required />
+            </div>
+            <div class="field-group">
+              <label>How long was your patrol?</label>
+              <input name="Patrol Length" placeholder="e.g., 2 hours" required />
+            </div>
+            <div class="field-group">
+              <label>What RTO were you in?</label>
+              <p class="help-text">Select ALL RTOs you were a part of</p>
+              <div class="checkbox-row">
+                <label><input type="checkbox" name="RTO - North" value="North" /> North</label>
+                <label><input type="checkbox" name="RTO - South" value="South" /> South</label>
+                <label><input type="checkbox" name="RTO - Highways" value="Highways" /> Highways</label>
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Who was the PC?</label>
+              <input name="PC" placeholder="Input all PC in the RTO" required />
+            </div>
+            <div class="field-group">
+              <label>How Many Priorities?</label>
+              <input type="number" name="Priorities" min="0" value="0" required />
+            </div>
+            <div class="field-group">
+              <label>Patrol Summary</label>
+              <textarea name="Patrol Summary" placeholder="Provide some detail..." required></textarea>
+              <p class="help-text">Provide some detail, doesn't need to be a book's worth</p>
+            </div>
+            <div class="field-group">
+              <label>Other Information</label>
+              <textarea name="Other Information" placeholder="If no info put N/A" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn full">Submit Patrol Log</button>
+            <div id="patrolStatus" class="status-text muted"></div>
+          </form>
+        </div>
+
+        <!-- ONBOARDING -->
+        <div class="card tab-panel hidden" id="tab-onboarding">
+          <header class="card-header">
+            <h2>Onboarding Log</h2>
+            <p class="muted">Document cadet onboarding sessions</p>
+          </header>
+
+          <form id="onboardingForm"
+                data-log-to-discord="true"
+                data-form-name="Onboarding Log"
+                data-webhook="YOUR_ONBOARDING_WEBHOOK_HERE"
+                data-status-target="onboardingStatus">
+            <div class="field-group">
+              <label>Your Discord ID</label>
+              <input name="Trainer Discord ID" placeholder="Your Discord ID (numbers only)" required />
+            </div>
+            <div class="field-group">
+              <label>Cadet's Discord ID</label>
+              <input name="Cadet Discord ID" placeholder="Cadet's Discord ID (numbers only)" required />
+            </div>
+            <div class="field-group">
+              <label>How long was the Onboarding?</label>
+              <input name="Onboarding Length" placeholder="e.g., 45 minutes" required />
+            </div>
+            <div class="field-group">
+              <label>Comments/Feedback</label>
+              <textarea name="Onboarding Comments" placeholder="Please provide feedback..." required></textarea>
+              <p class="help-text">Please provide something. Log will be denied if you input N/A</p>
+            </div>
+
+            <button type="submit" class="submit-btn full">Submit Onboarding Log</button>
+            <div id="onboardingStatus" class="status-text muted"></div>
+          </form>
+        </div>
+
+        <!-- TRAINING -->
+        <div class="card tab-panel hidden" id="tab-training">
+          <header class="card-header">
+            <h2>Training Log</h2>
+            <p class="muted">Record training sessions and evaluations</p>
+          </header>
+
+          <form id="trainingForm"
+                data-log-to-discord="true"
+                data-form-name="Training Log"
+                data-webhook="YOUR_TRAINING_WEBHOOK_HERE"
+                data-status-target="trainingStatus">
+            <div class="field-group">
+              <label>Your Discord ID</label>
+              <input name="Trainer Discord ID (Training)" placeholder="Your Discord ID (numbers only)" required />
+            </div>
+            <div class="field-group">
+              <label>Trainee's Discord ID/s</label>
+              <textarea name="Trainee Discord IDs" placeholder="Please list them (one per line)" required></textarea>
+            </div>
+            <div class="field-group">
+              <label>Type of Training?</label>
+              <input name="Type of Training" placeholder="e.g., Field Training, Traffic Stops, etc." required />
+            </div>
+            <div class="field-group">
+              <label>Comments/Feedback</label>
+              <textarea name="Training Comments" placeholder="Please provide feedback for all cadets..." required></textarea>
+              <p class="help-text">Please provide feedback for all Cadets. N/A will not be accepted</p>
+            </div>
+
+            <button type="submit" class="submit-btn full">Submit Training Log</button>
+            <div id="trainingStatus" class="status-text muted"></div>
+          </form>
+        </div>
+
+        <!-- RIDE ALONG -->
+        <div class="card tab-panel hidden" id="tab-ridealong">
+          <header class="card-header">
+            <h2>Ride Along Log</h2>
+            <p class="muted">Document ride along experiences</p>
+          </header>
+
+          <form id="ridealongForm"
+                data-log-to-discord="true"
+                data-form-name="Ride Along Log"
+                data-webhook="YOUR_RIDEALONG_WEBHOOK_HERE"
+                data-status-target="ridealongStatus">
+            <div class="field-group">
+              <label>Your Discord ID</label>
+              <input name="Trainer Discord ID (Ride Along)" placeholder="Your Discord ID (numbers only)" required />
+            </div>
+            <div class="field-group">
+              <label>Trainee's Discord ID</label>
+              <input name="Trainee Discord ID (Ride Along)" placeholder="Trainee's Discord ID (numbers only)" required />
+            </div>
+            <div class="field-group">
+              <label>Time</label>
+              <input name="Time" placeholder="5:23 PM CST - 6:23 PM CST" required />
+              <p class="help-text">Must be in your server's timezone</p>
+            </div>
+            <div class="field-group">
+              <label>Notes</label>
+              <textarea name="Ride Along Notes" placeholder="Include notes about the ride along..." required></textarea>
+              <p class="help-text">Must include some notes or log may be denied</p>
+            </div>
+
+            <button type="submit" class="submit-btn full">Submit Ride Along Log</button>
+            <div id="ridealongStatus" class="status-text muted"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
