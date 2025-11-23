@@ -34,8 +34,12 @@ app.use(
     secret: process.env.SESSION_SECRET || "dev_change_me",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 10 * 60 * 1000, // 10 minutes
+    },
   })
 );
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -144,11 +148,65 @@ app.get("/api/callback", async (req, res) => {
   }
 });
 
-app.get("/api/me", (req, res) => {
+app.get("/api/me", async (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ ok: false });
   }
-  res.json({ ok: true, user: req.session.user });
+
+  try {
+    // Re-check the member in the guild every time
+    const memberRes = await fetch(
+      `https://discord.com/api/guilds/${DISCORD_GUILD_ID}/members/${req.session.user.id}`,
+      {
+        headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
+      }
+    );
+
+    if (!memberRes.ok) {
+      // Not in the guild any more
+      console.warn(
+        `User ${req.session.user.id} failed member re-check:`,
+        await memberRes.text()
+      );
+      req.session.destroy(() => {
+        res.status(401).json({ ok: false });
+      });
+      return;
+    }
+
+    const member = await memberRes.json();
+    const memberRoles = member.roles || [];
+
+    if (ALLOWED_ROLE_IDS.length) {
+      const hasAllowed = memberRoles.some((id) =>
+        ALLOWED_ROLE_IDS.includes(id)
+      );
+      if (!hasAllowed) {
+        console.warn(
+          `User ${req.session.user.id} lost allowed role(s), destroying session`
+        );
+        req.session.destroy(() => {
+          res.status(401).json({ ok: false });
+        });
+        return;
+      }
+    }
+
+    // Still valid – you can update displayName if you like
+    const displayName =
+      member.nick ||
+      req.session.user.globalName ||
+      req.session.user.username;
+
+    req.session.user.displayName = displayName;
+
+    res.json({ ok: true, user: req.session.user });
+  } catch (err) {
+    console.error("Error on /api/me re-check:", err);
+    req.session.destroy(() => {
+      res.status(401).json({ ok: false });
+    });
+  }
 });
 
 app.post("/api/logout", (req, res) => {
