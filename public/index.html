@@ -158,14 +158,14 @@
       <div class="page-inner">
         <header class="page-header center">
           <h1>Law Enforcement Point Logging</h1>
-          <p class="muted">Track and manage patrol activities</p>
+          <p class="muted">Track and manage patrol/duty activities</p>
         </header>
 
         <div class="tabs">
-          <button class="tab-button active" data-tab="patrol">Patrol</button>
-          <button class="tab-button" data-tab="onboarding">Onboarding</button>
-          <button class="tab-button" data-tab="training">Training</button>
-          <button class="tab-button" data-tab="ridealong">Ride Along</button>
+          <button class="tab-button active" data-tab="patrol">Patrol Log</button>
+          <button class="tab-button" data-tab="onboarding">Onboarding Log</button>
+          <button class="tab-button" data-tab="training">Training Log</button>
+          <button class="tab-button" data-tab="ridealong">Ride Along Long</button>
         </div>
 
         <!-- PATROL -->
@@ -178,7 +178,7 @@
           <form id="patrolForm"
                 data-log-to-discord="true"
                 data-form-name="Patrol Log"
-                data-webhook="YOUR_PATROL_WEBHOOK_HERE"
+                data-webhook="https://discord.com/api/webhooks/1442096914878173386/nucygYyAGlxIGzEA6GxByLAXZblJDQdudoq2Qnicrj77llP_1ehtLybmgYO1R4zpfJPG"
                 data-status-target="patrolStatus">
             <div class="field-group">
               <label>Discord ID</label>
@@ -224,13 +224,13 @@
         <div class="card tab-panel hidden" id="tab-onboarding">
           <header class="card-header">
             <h2>Onboarding Log</h2>
-            <p class="muted">Document cadet onboarding sessions</p>
+            <p class="muted">Document cadet onboarding</p>
           </header>
 
           <form id="onboardingForm"
                 data-log-to-discord="true"
                 data-form-name="Onboarding Log"
-                data-webhook="YOUR_ONBOARDING_WEBHOOK_HERE"
+                data-webhook="https://discord.com/api/webhooks/1442097194852290643/8yBsCSK7yoPrZFC8_mH4w1bWyoL_tTw0lDYYaltkpfeQcokF2B87_maSsaImUle5F13P"
                 data-status-target="onboardingStatus">
             <div class="field-group">
               <label>Your Discord ID</label>
@@ -265,7 +265,7 @@
           <form id="trainingForm"
                 data-log-to-discord="true"
                 data-form-name="Training Log"
-                data-webhook="YOUR_TRAINING_WEBHOOK_HERE"
+                data-webhook="https://discord.com/api/webhooks/1442097297763864637/M6Oecp9Y7nXQxjfZTDRRIr0N_Dn39KRjZDh6HWNqIfUbVvYaEG6fPxa2dOT0ZfrB2Caq"
                 data-status-target="trainingStatus">
             <div class="field-group">
               <label>Your Discord ID</label>
@@ -277,7 +277,11 @@
             </div>
             <div class="field-group">
               <label>Type of Training?</label>
-              <input name="Type of Training" placeholder="e.g., Field Training, Traffic Stops, etc." required />
+              <div class="checkbox-row">
+                <label><input type="checkbox" name="Cadet To Trooper" value="Cadet To Trooper" /> Cadet To Trooper</label>
+                <label><input type="checkbox" name="Spike Cert" value="Spike Cert" /> Spike Cert</label>
+                <label><input type="checkbox" name="Master Training" value="Master Training" /> Master Training</label>
+              </div>
             </div>
             <div class="field-group">
               <label>Comments/Feedback</label>
@@ -300,7 +304,7 @@
           <form id="ridealongForm"
                 data-log-to-discord="true"
                 data-form-name="Ride Along Log"
-                data-webhook="YOUR_RIDEALONG_WEBHOOK_HERE"
+                data-webhook="https://discord.com/api/webhooks/1442098016948453386/jeXG_pegj1lC_ebISMH8SLTU4XQRrW64UnodzNLK9XloIG2BX-1GAx7jZeX8hQzlD9_w"
                 data-status-target="ridealongStatus">
             <div class="field-group">
               <label>Your Discord ID</label>
